@@ -14,6 +14,9 @@ def build():
 	# connect to db, collection
 	words = connect()
 
+	# wipe previous documents
+	words.remove()
+
 	# insert contents of each file in path in form of Word objects into db.collection
 	for file in files:
 		try:
@@ -27,15 +30,13 @@ def build():
 		except IOError:
 			pass
 
+	print words.count()
+
 ## remove punctuation from before/after word
 def clean(word):
-	word = {
-		'word': word,
-		'sent_end': sent_end(word)
-	}
-	punct = [' ', ',', '.', '?', '!', '"', ':', ';', '-']
+	punct = [' ', ',','?', '!', '"', ':', ';', '-']
 	for char in punct:
-		word['word'] = word['word'].strip(char)
+		word = word.strip(char)
 	return word
 
 ## checks if word is at the end of the sentence
@@ -54,11 +55,18 @@ def insert(text, collection):
 			# get part of speech
 			# http://nltk.org/book/ch05.html
 			Word['pos'] = pos_tag(word_tokenize(text[index]))[0][1]
+			# end of sentence
+			Word['end'] = sent_end(text[index])
+			# beginning of sentence
+			Word['start'] = True if sent_end(text[index - 1]) else False
+			# proceeding word
 			if index + 1 < length and text[index + 1].find('\x00') is -1:
 				Word['2'] = text[index + 1]
-	
+			# words 2 after
 			if index + 2 < length and text[index + 2].find('\x00') is -1:
 				Word['3'] = text[index + 2]
 			
 			collection.insert(Word)
 			print Word
+
+build()

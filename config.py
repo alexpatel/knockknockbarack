@@ -9,6 +9,4 @@ def connect():
 	client = MongoClient(host, port)
 	db = client[db_name]
 	words = db.words
-	words.remove()
-
 	return words
