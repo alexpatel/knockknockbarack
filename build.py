@@ -34,7 +34,7 @@ def build():
 
 ## remove punctuation from before/after word
 def clean(word):
-	punct = [' ', ',','?', '!', '"', ':', ';', '-']
+	punct = [' ','?', '!', '"', ':', ';', '-']
 	for char in punct:
 		word = word.strip(char)
 	return word
