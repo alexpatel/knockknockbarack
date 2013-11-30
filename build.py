@@ -1,6 +1,6 @@
 import os
-from pymongo import MongoClient
-from nltk import word_tokenize #, pos_tag
+from nltk import word_tokenize, pos_tag # natural language toolkit - to get parts of speech
+from config import connect
 
 ## build db collection with markov Word objects from txt files in speeches folder
 def build():
@@ -8,13 +8,11 @@ def build():
 	path = "./speeches/"
 
 	# list of files in path
-	# w/out D.S_store fucking osx.
+	# w/out D.S_store. darn osx.
 	files = [file for file in os.listdir(path) if file is not ".DS_Store"]
 
 	# connect to db, collection
-	db = connect()
-	words = db.words
-	words.remove()
+	words = connect()
 
 	# insert contents of each file in path in form of Word objects into db.collection
 	for file in files:
@@ -22,8 +20,6 @@ def build():
 			f = open(path + file, 'r')
 			try:
 				text = f.read()
-				#part_speech = pos_tag(word_tokenize(text))
-				#print part_speech
 				text = [clean(word) for word in text.split() if clean(word) is not '']
 				insert(text, words)
 			finally:
@@ -33,10 +29,18 @@ def build():
 
 ## remove punctuation from before/after word
 def clean(word):
+	word = {
+		'word': word,
+		'sent_end': sent_end(word)
+	}
 	punct = [' ', ',', '.', '?', '!', '"', ':', ';', '-']
 	for char in punct:
-		word = word.strip(char)
+		word['word'] = word['word'].strip(char)
 	return word
+
+## checks if word is at the end of the sentence
+def sent_end(word):
+	return True if word.find('.', len(word) - 1) is not -1 else False
 
 ## insert words in text into collect as markov Word objects
 def insert(text, collection):
@@ -47,6 +51,9 @@ def insert(text, collection):
 			Word = {
 				'1': text[index]
 			}
+			# get part of speech
+			# http://nltk.org/book/ch05.html
+			Word['pos'] = pos_tag(word_tokenize(text[index]))[0][1]
 			if index + 1 < length and text[index + 1].find('\x00') is -1:
 				Word['2'] = text[index + 1]
 	
@@ -55,14 +62,3 @@ def insert(text, collection):
 			
 			collection.insert(Word)
 			print Word
-
-## connect to mongo database
-def connect():
-	host = 'localhost'
-	port = 27017
-	db_name = 'kkb'
-
-	client = MongoClient(host, port)
-	return client[db_name]
-
-build()
