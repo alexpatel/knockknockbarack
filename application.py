@@ -7,8 +7,8 @@ application = flask.Flask(__name__)
 application.debug=True
  
 @application.route('/')
-def generate():
-    return  
+def main():
+    return joke() 
      
 if __name__ == '__main__':
 	build()
