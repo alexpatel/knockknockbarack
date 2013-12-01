@@ -10,8 +10,8 @@ application.debug=True
  
 @application.route('/')
 def generate():
-    return joke()
- 
+    return  
+     
 if __name__ == '__main__':
 	build()
     application.run(host='0.0.0.0', debug=True)
