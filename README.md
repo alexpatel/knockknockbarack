@@ -1,7 +1,7 @@
 Knock Knock, Barack
 ================
 
-'Knock Knock, Barack' generates original jokes using order-1 and order-2 Markov chains on a set of Obama campaign and political speeches.
+'Knock Knock, Barack' generates original jokes using order-1 and order-2 Markov chains from a set of Obama campaign and political speeches.
 
 ================
 
