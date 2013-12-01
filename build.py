@@ -1,5 +1,5 @@
 import os
-from nltk import word_tokenize, pos_tag # natural language toolkit - to get parts of speech
+from nltk import word_tokenize, pos_tag # natural language toolkit - for part of speech analysis
 from config import connect
 
 ## build db collection with markov Word objects from txt files in speeches folder
@@ -65,3 +65,5 @@ def insert(text, collection):
 				Word['3'] = text[index + 2]
 			collection.insert(Word)
 			print Word
+
+build()

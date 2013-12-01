@@ -43,7 +43,7 @@ def generate(start_word=None):
 	return phrase
 
 ## generate a yo mama joke
-def your_mama():
+def yo_mama():
 	# pick a random adjective
 	# remove possible residual period from end
 	adj = words.find({'pos': 'JJ'})[randint(0, words.find({'pos': 'JJ'}).count() - 1)]['1'].strip('.')
@@ -71,20 +71,27 @@ def knock_knock():
  	lead = lead.capitalize().strip(',').strip('.')
  	phrase = phrase.capitalize()
 
-	# \n = \u000A. i can't figure out this utf-8 garbage with mongo
-	return u"Knock Knock... \u000AWho's There? \u000A{0}. \u000A{0} who? \u000A{1} \u000A".format(lead, phrase)
+	return u"Knock Knock... <br>Who's There? <br>{0}. <br>{0} who? <br>{1} <br>".format(lead, phrase)
 
-# why did the chicken cross the road?
+## why did the chicken cross the road?
 def chicken():
 	start = words.find({'1': 'to'})[randint(0, words.find({'1': 'to'}).count() - 1)]['2'].strip('.')
 	# we want to find 'to' --> verb
-	while not pos_tag(word_tokenize(start))[0][1].startswith('V'):
+	while not pos_tag(word_tokenize(start))[0][1].startswith('V') or 'ing' in start:
 		start = words.find({'1': 'to'})[randint(0, words.find({'1': 'to'}).count() - 1)]['2'].strip('.')
 
 	phrase = generate(start)
 
-	return u"Why did the chicken cross the road?\u000ATo {0}".format(phrase)
+	return u"Why did the chicken cross the road?<br>To {0}".format(phrase)
 
-for i in range(20):
-	print chicken()
+## generate a random joke
+def joke():
+	types = ['yo mama', 'knock knock', 'chicken']
+	ind = randint(0, len(types) - 1)
 
+	if ind is 0:
+		return yo_mama()
+	elif ind is 1:
+		return knock_knock()
+	elif ind is 2:
+		return chicken()
