@@ -1,4 +1,4 @@
-from config import connect
+from conf import connect
 from random import randint	
 from nltk import word_tokenize, pos_tag
 words = connect()
