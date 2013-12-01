@@ -65,5 +65,3 @@ def insert(text, collection):
 				Word['3'] = text[index + 2]
 			collection.insert(Word)
 			print Word
-
-build()
