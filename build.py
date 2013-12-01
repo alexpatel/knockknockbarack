@@ -30,8 +30,6 @@ def build():
 		except IOError:
 			pass
 
-	print words.count()
-
 ## remove punctuation from before/after word
 def clean(word):
 	punct = [' ','?', '!', '"', ':', ';', '-']
@@ -65,7 +63,6 @@ def insert(text, collection):
 			# words 2 after
 			if index + 2 < length and text[index + 2].find('\x00') is -1:
 				Word['3'] = text[index + 2]
-			
 			collection.insert(Word)
 			print Word
 

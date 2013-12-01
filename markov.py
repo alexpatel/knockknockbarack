@@ -1,6 +1,7 @@
 from config import connect
 from random import randint	
 
+## generate a markov
 def generate(start_word=None, pos=None):
 	words = connect()
 
@@ -14,15 +15,11 @@ def generate(start_word=None, pos=None):
 		# get random sentence beginning
 		word = words.find({'start': True})[randint(0, words.find({'start': True}).count() - 1)]
 
-	phrase = ''
+	phrase = word['1']+' '
 
 	# build word until natural sentence end is reached
 	while not word['end']:	
-		# add word to chain
-		phrase += word['1']+' '
-
-		# figure out next word
-		count =  words.find({'1': word['2'], '2': word['3']}).count()
+		count =  words.find({'1': word['2'],  '2': word['3']}).count()
 		if count != 0:
 			word = words.find({'1': word['2'], '2': word['3']})[randint(0, count - 1)]
 		else:
@@ -35,6 +32,9 @@ def generate(start_word=None, pos=None):
 				count =  words.find().count()
 				word = words.find()[randint(0, count - 1)]
 	
+		# add word to chain
+		phrase += word['1']+' '
+
 	print phrase
 	return phrase
 
