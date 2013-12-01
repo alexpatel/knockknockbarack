@@ -39,7 +39,7 @@ def clean(word):
 
 ## checks if word is at the end of the sentence
 def sent_end(word):
-	return True if word.find('.', len(word) - 1) is not -1 else False
+	return True if word.find('.', len(word) - 1) is not -1 and word is not 'U.S.' else False
 
 ## insert words in text into collect as markov Word objects
 def insert(text, collection):
@@ -65,5 +65,3 @@ def insert(text, collection):
 				Word['3'] = text[index + 2]
 			collection.insert(Word)
 			print Word
-
-build()
