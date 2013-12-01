@@ -12,13 +12,16 @@
 #	application.run(host='0.0.0.0', debug=True)
 
 import flask
-from markov import joke
+from markov import *
  
 application = flask.Flask(__name__)
+
+application.debug=True
  
 @application.route('/')
-def main():
-    return joke()
+def hello_world():
+	joke = joke()
+    return joke
  
 if __name__ == '__main__':
-    application.run(host='0.0.0.0')
+    application.run(host='0.0.0.0',  debug=True)
