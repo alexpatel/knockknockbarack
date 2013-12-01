@@ -1,6 +1,6 @@
 import os
 from nltk import word_tokenize, pos_tag # natural language toolkit - for part of speech analysis
-from config import connect
+from conf import connect
 
 ## build db collection with markov Word objects from txt files in speeches folder
 def build():
