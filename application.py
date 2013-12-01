@@ -8,8 +8,7 @@ application.debug=True
  
 @application.route('/')
 def main():
-    return joke() 
+	return joke() 
      
 if __name__ == '__main__':
-	build()
-    application.run(host='0.0.0.0', debug=True)
+	application.run(host='0.0.0.0', debug=True)
