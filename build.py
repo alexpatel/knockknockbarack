@@ -1,6 +1,7 @@
 import os
 from nltk import word_tokenize, pos_tag # natural language toolkit - for part of speech analysis
 from conf import connect
+import markov
 
 ## build db collection with markov Word objects from txt files in speeches folder
 def build():
@@ -65,3 +66,14 @@ def insert(text, collection):
 				Word['3'] = text[index + 2]
 			collection.insert(Word)
 			print Word
+
+## for when I do something stupid and want to quickly rebuild the cached jokes
+def rebuild_jokes():
+	jokes = connect('jokes')
+	jokes.remove()
+
+	# insert 10 new jokes
+	for i in range(10):
+		new_joke = { 'joke': markov.rand_joke()}
+		jokes.insert(new_joke)
+

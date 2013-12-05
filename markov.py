@@ -26,8 +26,7 @@ def generate(start_word=None):
 	# build word until natural sentence end is reached
 	while not word['end']:
 		try:
-			count = words.find({'1': word['2']}).count()
-			#count = words.find({'1': word['2'],  '2': word['3']}).count()
+			count = words.find({'1': word['2'],  '2': word['3']}).count()
 			if count is not 0:
 				word = words.find({'1': word['2'], '2': word['3']})[randint(0, words.find({'1': word['2'],  '2': word['3']}).count() - 1)]
 			else: raise KeyError # pretty janky
@@ -87,7 +86,7 @@ def knock_knock():
  	lead = lead.capitalize().strip(',').strip('.')
  	phrase = phrase.capitalize()
 
-	return u"Knock Knock... <br>Who's There? <br>{0}. <br>{0} who? <br>{1} <br>".format(lead, phrase)
+	return u"Knock Knock... \u000A Who's There? {0}. \u000A {0} who? \u000A {1} \n".format(lead, phrase)
 
 ## why did the chicken cross the road?
 def chicken():
@@ -100,9 +99,9 @@ def chicken():
 
 	phrase = generate(start)
 
-	return u"Why did the chicken cross the road?<br>To {0}".format(phrase)
+	return u"Why did the chicken cross the road?\u000A To {0}".format(phrase)
 
-## generate a random joke
+## generate a joke
 def joke():
 	jokes = connect('jokes')
 
@@ -120,24 +119,15 @@ def joke():
 
 ## start a new thread to remove returned joke from the jokes collection / make a new one
 def async(coll, joke):
-	
 	# remove used joke
 	coll.remove(joke)
 
-	text = rand_joke()
-
-	# create mongo document
-	new_joke = {
-		'joke': text
-	}
-
-	# insert into collection
+	# mongo insert
+	new_joke = { 'joke': rand_joke()}
 	coll.insert(new_joke)
 
-	# i feel like this is necessary for async. no idea why. probably isn't. 
-	return
-
-def rand_joke():
+## generate a random joke from list of types
+def rand_joke():\
 		# generate random type of joke and insert into coll
 	types = ['yo mama', 'knock knock', 'chicken']
 	ind = randint(0, len(types) - 1)
@@ -151,5 +141,3 @@ def rand_joke():
 
 	return joke
 
-for i in range(10):
-	print rand_joke() +"\n"
