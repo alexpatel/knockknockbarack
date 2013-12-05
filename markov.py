@@ -43,7 +43,8 @@ def generate(start_word=None):
 
 		# let's make sure thesentence is getting too long.
 		# (only as long as we don't end on a non-sentence ending word)
-		bad_ending = pos_tag(word_tokenize(word['1']))[0][1] in ['RB', 'CC', 'IN', 'JJ'] or word['1'] is 'U.S.' or word['1'] is 'that'
+		bad_ending = pos_tag(word_tokenize(word['1']))[0][1] in ['RB', 'CC', 'IN', 'JJ'] \
+			or word['1'] is in ['U.S.', 'that', 'the', 'a']
 
 		if len(phrase) > markov_length and phrase[len(phrase) - 1] is not '.' and not bad_ending:
 			return phrase + word['1'] + '.'
@@ -61,8 +62,8 @@ def yo_mama():
 	# remove possible residual period from end
 	adj = words.find({'pos': 'JJ'})[randint(0, words.find({'pos': 'JJ'}).count() - 1)]['1'].strip('.')
 	
-	# 'own' is bad...
-	while adj is 'own':
+	# these are just one's that nltk doesn't pick up on. no idea why.
+	while adj is in ['own', "don't", "wasn't", "didn't", "won't"]:
 		adj = words.find({'pos': 'JJ'})[randint(0, words.find({'pos': 'JJ'}).count() - 1)]['1'].strip('.')
 
 	# generate a phrase starting with a 'that' that proceeds an adjective
@@ -86,7 +87,7 @@ def knock_knock():
  	lead = lead.capitalize().strip(',').strip('.')
  	phrase = phrase.capitalize()
 
-	return u"Knock Knock... \u000A Who's There? {0}. \u000A {0} who? \u000A {1} \n".format(lead, phrase)
+	return u"Knock Knock... <br>Who's There? {0}. <br>{0} who? <br>{1} \n".format(lead, phrase)
 
 ## why did the chicken cross the road?
 def chicken():
@@ -99,7 +100,7 @@ def chicken():
 
 	phrase = generate(start)
 
-	return u"Why did the chicken cross the road?\u000A To {0}".format(phrase)
+	return u"Why did the chicken cross the road?<br>To {0}".format(phrase)
 
 ## generate a joke
 def joke():
