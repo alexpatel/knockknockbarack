@@ -3,19 +3,22 @@ from random import randint
 from nltk import word_tokenize, pos_tag
 import thread
 
-markov_length = 100
+markov_length = 125
 
 ## generate a markov
 def generate(start_word=None):
 	words = connect('words')
 
+	word = '-'
 	try:
 		if start_word:
 			# pick a random beginning with start_word as first word
-			word = words.find({'1': start_word})[randint(0, words.find({'1': start_word}).count() - 1)]
+			while word is '-':
+				word = words.find({'1': start_word})[randint(0, words.find({'1': start_word}).count() - 1)]
 		else:
 			# get random sentence beginning
-			word = words.find({'start': True})[randint(0, words.find({'start': True}).count() - 1)]
+			while word is '-':
+				word = words.find({'start': True})[randint(0, words.find({'start': True}).count() - 1)]
 	except ValueError:
 		# try again
 		if start_word: generate(start_word)
@@ -27,8 +30,10 @@ def generate(start_word=None):
 	while not word['end']:
 		try:
 			count = words.find({'1': word['2'],  '2': word['3']}).count()
+			#count = words.find({'1': word['2']}).count()
 			if count is not 0:
 				word = words.find({'1': word['2'], '2': word['3']})[randint(0, words.find({'1': word['2'],  '2': word['3']}).count() - 1)]
+				#word = words.find({'1': word['2']})[randint(0, words.find({'1': word['2']}).count() - 1)]
 			else: raise KeyError # pretty janky
 		except KeyError:
 			# word at end of file - no '2'/'3' string created
@@ -44,10 +49,10 @@ def generate(start_word=None):
 		# let's make sure thesentence is getting too long.
 		# (only as long as we don't end on a non-sentence ending word)
 		bad_ending = pos_tag(word_tokenize(word['1']))[0][1] in ['RB', 'CC', 'IN', 'JJ'] \
-			or word['1'] is in ['U.S.', 'that', 'the', 'a']
+			or word['1'] in ['U.S.', 'that', 'the', 'a']
 
 		if len(phrase) > markov_length and phrase[len(phrase) - 1] is not '.' and not bad_ending:
-			return phrase + word['1'] + '.'
+			return phrase + word['1'].strip('/') + '.'
 
 		# add word to chain
 		phrase += word['1']+' '
@@ -63,7 +68,7 @@ def yo_mama():
 	adj = words.find({'pos': 'JJ'})[randint(0, words.find({'pos': 'JJ'}).count() - 1)]['1'].strip('.')
 	
 	# these are just one's that nltk doesn't pick up on. no idea why.
-	while adj is in ['own', "don't", "wasn't", "didn't", "won't"]:
+	while adj in ['own', "don't", "wasn't", "didn't", "won't"]:
 		adj = words.find({'pos': 'JJ'})[randint(0, words.find({'pos': 'JJ'}).count() - 1)]['1'].strip('.')
 
 	# generate a phrase starting with a 'that' that proceeds an adjective
@@ -87,7 +92,7 @@ def knock_knock():
  	lead = lead.capitalize().strip(',').strip('.')
  	phrase = phrase.capitalize()
 
-	return u"Knock Knock... <br>Who's There? {0}. <br>{0} who? <br>{1} \n".format(lead, phrase)
+	return u"Knock Knock... <br><em>Who's There?</em><br>{0}. <br><em>{0} who?</em><br>{1} \n".format(lead, phrase)
 
 ## why did the chicken cross the road?
 def chicken():
@@ -100,7 +105,7 @@ def chicken():
 
 	phrase = generate(start)
 
-	return u"Why did the chicken cross the road?<br>To {0}".format(phrase)
+	return u"<em>Why did the chicken cross the road?</em><br>To {0}".format(phrase)
 
 ## generate a joke
 def joke():
@@ -112,6 +117,7 @@ def joke():
 	# async broke. just give them a damn joke.
 	if joke is None:
 		joke = rand_joke()
+		thread.start_new_thread ( async, (jokes) )
 
 	# asyncronously do the stuff that we don't need to accomplish to give the user a joke
 	thread.start_new_thread ( async, (jokes, joke) )
@@ -119,9 +125,10 @@ def joke():
 	return joke['joke'].strip('/')
 
 ## start a new thread to remove returned joke from the jokes collection / make a new one
-def async(coll, joke):
+def async(coll, joke=None):
 	# remove used joke
-	coll.remove(joke)
+	if joke:
+		coll.remove(joke)
 
 	# mongo insert
 	new_joke = { 'joke': rand_joke()}
