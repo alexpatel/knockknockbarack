@@ -3,7 +3,7 @@ from random import randint
 from nltk import word_tokenize, pos_tag
 import thread
 
-markov_length = 50
+markov_length = 100
 
 ## generate a markov
 def generate(start_word=None):
@@ -24,7 +24,7 @@ def generate(start_word=None):
 	phrase = word['1']+' '
 
 	# build word until natural sentence end is reached
-	while not word['end'] and word['1'] is not 'U.S.':
+	while not word['end']:
 		try:
 			count = words.find({'1': word['2']}).count()
 			#count = words.find({'1': word['2'],  '2': word['3']}).count()
@@ -42,11 +42,15 @@ def generate(start_word=None):
 				# last resort = random word
 				word = words.find()[randint(0, words.find().count() - 1)]
 
+		# let's make sure thesentence is getting too long.
+		# (only as long as we don't end on a non-sentence ending word)
+		bad_ending = pos_tag(word_tokenize(word['1']))[0][1] in ['RB', 'CC', 'IN', 'JJ'] or word['1'] is 'U.S.' or word['1'] is 'that'
+
+		if len(phrase) > markov_length and phrase[len(phrase) - 1] is not '.' and not bad_ending:
+			return phrase + word['1'] + '.'
+
 		# add word to chain
 		phrase += word['1']+' '
-
-		if len(phrase) > markov_length and phrase[len(phrase) - 1] is not '.':
-			return phrase + '.'
 
 	return phrase
 
@@ -145,7 +149,7 @@ def rand_joke():
 	else:
 		joke = chicken()
 
-	return text
+	return joke
 
 for i in range(10):
-	print joke() +"\n"
+	print rand_joke() +"\n"
