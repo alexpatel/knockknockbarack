@@ -3,6 +3,8 @@ from random import randint
 from nltk import word_tokenize, pos_tag
 import thread
 
+markov_length = 50
+
 ## generate a markov
 def generate(start_word=None):
 	words = connect('words')
@@ -22,9 +24,10 @@ def generate(start_word=None):
 	phrase = word['1']+' '
 
 	# build word until natural sentence end is reached
-	while not word['end']:
+	while not word['end'] and word['1'] is not 'U.S.':
 		try:
-			count = words.find({'1': word['2'],  '2': word['3']}).count()
+			count = words.find({'1': word['2']}).count()
+			#count = words.find({'1': word['2'],  '2': word['3']}).count()
 			if count is not 0:
 				word = words.find({'1': word['2'], '2': word['3']})[randint(0, words.find({'1': word['2'],  '2': word['3']}).count() - 1)]
 			else: raise KeyError # pretty janky
@@ -41,6 +44,9 @@ def generate(start_word=None):
 
 		# add word to chain
 		phrase += word['1']+' '
+
+		if len(phrase) > markov_length and phrase[len(phrase) - 1] is not '.':
+			return phrase + '.'
 
 	return phrase
 
@@ -97,12 +103,16 @@ def joke():
 	jokes = connect('jokes')
 
 	# get first joke from jokes collection
-	joke = jokes.find_one()['joke']
+	joke = jokes.find_one()
+
+	# async broke. just give them a damn joke.
+	if joke is None:
+		joke = rand_joke()
 
 	# asyncronously do the stuff that we don't need to accomplish to give the user a joke
 	thread.start_new_thread ( async, (jokes, joke) )
 
-	return joke
+	return joke['joke'].strip('/')
 
 ## start a new thread to remove returned joke from the jokes collection / make a new one
 def async(coll, joke):
@@ -110,16 +120,7 @@ def async(coll, joke):
 	# remove used joke
 	coll.remove(joke)
 
-	# generate random type of joke and insert into coll
-	types = ['yo mama', 'knock knock', 'chicken']
-	ind = randint(0, len(types) - 1)
-
-	if ind is 0:
-		text = yo_mama()
-	elif ind is 1:
-		text = knock_knock()
-	else:
-		text = chicken()
+	text = rand_joke()
 
 	# create mongo document
 	new_joke = {
@@ -127,20 +128,24 @@ def async(coll, joke):
 	}
 
 	# insert into collection
-	insert_joke(new_joke)
+	coll.insert(new_joke)
 
 	# i feel like this is necessary for async. no idea why. probably isn't. 
 	return
 
-## insert joke into 'jokes' collection for later retrieval
-def insert_joke(joke):
-	jokes = connect('jokes')
-	jokes.insert(joke)
+def rand_joke():
+		# generate random type of joke and insert into coll
+	types = ['yo mama', 'knock knock', 'chicken']
+	ind = randint(0, len(types) - 1)
 
+	if ind is 0:
+		joke = yo_mama()
+	elif ind is 1:
+		joke = knock_knock()
+	else:
+		joke = chicken()
 
-new_joke = {
-	'joke': yo_mama()
-}
+	return text
 
-insert_joke(new_joke)
-
+for i in range(10):
+	print joke() +"\n"
