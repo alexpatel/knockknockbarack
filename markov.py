@@ -1,10 +1,12 @@
 from conf import connect
 from random import randint	
 from nltk import word_tokenize, pos_tag
-words = connect()
+import thread
 
 ## generate a markov
 def generate(start_word=None):
+	words = connect('words')
+
 	try:
 		if start_word:
 			# pick a random beginning with start_word as first word
@@ -44,6 +46,8 @@ def generate(start_word=None):
 
 ## generate a yo mama joke
 def yo_mama():
+	words = connect('words')
+
 	# pick a random adjective
 	# remove possible residual period from end
 	adj = words.find({'pos': 'JJ'})[randint(0, words.find({'pos': 'JJ'}).count() - 1)]['1'].strip('.')
@@ -61,6 +65,8 @@ def yo_mama():
 
 # generate knock_knock joke
 def knock_knock():	
+	words = connect('words')
+
 	# pick a random knock-knock lead
 	lead = words.find({'pos': 'NN'})[randint(0, words.find({'pos': 'NN'}).count() - 1)]['1'].strip('.')
 
@@ -75,6 +81,8 @@ def knock_knock():
 
 ## why did the chicken cross the road?
 def chicken():
+	words = connect('words')
+
 	start = words.find({'1': 'to'})[randint(0, words.find({'1': 'to'}).count() - 1)]['2'].strip('.')
 	# we want to find 'to' --> verb
 	while not pos_tag(word_tokenize(start))[0][1].startswith('V') or 'ing' in start:
@@ -86,12 +94,53 @@ def chicken():
 
 ## generate a random joke
 def joke():
+	jokes = connect('jokes')
+
+	# get first joke from jokes collection
+	joke = jokes.find_one()['joke']
+
+	# asyncronously do the stuff that we don't need to accomplish to give the user a joke
+	thread.start_new_thread ( async, (jokes, joke) )
+
+	return joke
+
+## start a new thread to remove returned joke from the jokes collection / make a new one
+def async(coll, joke):
+	
+	# remove used joke
+	coll.remove(joke)
+
+	# generate random type of joke and insert into coll
 	types = ['yo mama', 'knock knock', 'chicken']
 	ind = randint(0, len(types) - 1)
 
 	if ind is 0:
-		return yo_mama()
+		text = yo_mama()
 	elif ind is 1:
-		return knock_knock()
-	elif ind is 2:
-		return chicken()
+		text = knock_knock()
+	else:
+		text = chicken()
+
+	# create mongo document
+	new_joke = {
+		'joke': text
+	}
+
+	# insert into collection
+	insert_joke(new_joke)
+
+	# i feel like this is necessary for async. no idea why. probably isn't. 
+	return
+
+## insert joke into 'jokes' collection for later retrieval
+def insert_joke(joke):
+	jokes = connect('jokes')
+	jokes.insert(joke)
+
+
+new_joke = {
+	'joke': yo_mama()
+}
+
+insert_joke(new_joke)
+

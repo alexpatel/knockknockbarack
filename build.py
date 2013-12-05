@@ -12,7 +12,7 @@ def build():
 	files = [file for file in os.listdir(path) if file is not ".DS_Store"]
 
 	# connect to db, collection
-	words = connect()
+	words = connect('words')
 
 	# wipe previous documents
 	words.remove()
