@@ -1,0 +1,70 @@
+@import url(http://fonts.googleapis.com/css?family=Luckiest+Guy);
+@import url(http://fonts.googleapis.com/css?family=Open+Sans);
+
+body{
+	background-image:url('../img/flag.jpg'); 
+  	background-size: cover;
+}
+
+.content{
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 35px;
+}
+
+.btn{
+	margin-top:45px;
+	margin-bottom:10px;
+	font-family: 'Luckiest Guy', cursive;
+	background-color:#003D7C;
+	color:#FFEFBC;
+}
+
+.btn:active, .btn:hover{
+	background-color:#33597E;
+	color:#FFEFBC;
+}
+
+.title{
+	padding-left:10px;
+	font-family: 'Luckiest Guy', cursive;
+	color: #FFEFBC;
+}
+
+.navbar{
+	background-color: #A30234;
+}
+
+.joke{
+	font-family: 'Open Sans', sans-serif;
+	line-height:130%;
+}
+
+#white-house {
+	background-color: transparent;
+	bottom:0;
+	z-index: -999;
+	margin-left: auto;
+	margin-right: auto;
+	position:fixed; 
+	}
+
+h6, #cs50, #cs50:hover, #cs50:active{
+	color: #FFEFBC;
+	font-family: 'Open Sans', sans-serif;
+}
+
+h6{
+	margin-left: auto;
+	margin-right: auto;
+	padding-left:10px;
+}
+
+#footer{
+	background-color:#33597E;
+	position:fixed;
+	bottom: 0;
+	padding: 1px;
+	width:100%;
+	line-height:100%
+}
