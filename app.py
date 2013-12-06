@@ -7,7 +7,7 @@ app = flask.Flask(__name__)
 def main():
 	return flask.render_template('index.html', joke=joke()) 
 
-@app.route('/_joke')
+@app.route('/_get_joke')
 def get_joke():
 	return joke()
 
