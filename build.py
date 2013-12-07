@@ -3,6 +3,10 @@ from nltk import word_tokenize, pos_tag # natural language toolkit - for part of
 from conf import connect
 import markov
 
+# connect to db, get relevant collections
+jokes = connect('jokes')
+words = connect('words')
+
 ## build db collection with markov Word objects from txt files in speeches folder
 def build():
 	# path to folder with speeches
@@ -11,9 +15,6 @@ def build():
 	# list of files in path
 	# w/out D.S_store. darn osx.
 	files = [file for file in os.listdir(path) if file is not ".DS_Store"]
-
-	# connect to db, collection
-	words = connect('words')
 
 	# wipe previous documents
 	words.remove()
@@ -68,19 +69,9 @@ def insert(text, collection):
 			print Word
 
 ## for when I do something stupid and want to quickly rebuild the cached jokes
-def rebuild_jokes():
-	jokes = connect('jokes')
-
-	# insert 10 new jokes
-	for i in range(50):
-		new_joke = { 'joke': markov.rand_joke()}
-		jokes.insert(new_joke)
-		print new_joke['joke']
-
+## / for when we need to add more jokes into cache, in general
 def add_jokes(num):
-	jokes = connect('jokes')
 	for i in range(num):
 		new_joke = { 'joke': markov.rand_joke()}
 		jokes.insert(new_joke)
 		print new_joke['joke']
-

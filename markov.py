@@ -6,10 +6,12 @@ import build
 
 markov_length = 125
 
+# connect to db, get relevant collections
+words = connect('words')
+jokes = connect('jokes')
+
 ## generate a markov
 def generate(start_word=None):
-	words = connect('words')
-
 	word = '-'
 	try:
 		if start_word:
@@ -62,8 +64,6 @@ def generate(start_word=None):
 
 ## generate a yo mama joke
 def yo_mama():
-	words = connect('words')
-
 	# pick a random adjective
 	# remove possible residual period from end
 	adj = words.find({'pos': 'JJ'})[randint(0, words.find({'pos': 'JJ'}).count() - 1)]['1'].strip('.')
@@ -81,8 +81,6 @@ def yo_mama():
 
 # generate knock_knock joke
 def knock_knock():	
-	words = connect('words')
-
 	# pick a random knock-knock lead
 	lead = words.find({'pos': 'NN'})[randint(0, words.find({'pos': 'NN'}).count() - 1)]['1'].strip('.')
 
@@ -97,8 +95,6 @@ def knock_knock():
 
 ## why did the chicken cross the road?
 def chicken():
-	words = connect('words')
-
 	start = words.find({'1': 'to'})[randint(0, words.find({'1': 'to'}).count() - 1)]['2'].strip('.')
 	# we want to find 'to' --> verb
 	while not pos_tag(word_tokenize(start))[0][1].startswith('V') or 'ing' in start:
@@ -110,10 +106,8 @@ def chicken():
 
 ## generate a joke
 def joke():
-	jokes = connect('jokes')
-
 	if jokes.count() is 0:
-		thread.start_new_thread(build.rebuild_jokes)
+		thread.start_new_thread(build.add_jokes, (10))
 		return rand_joke()
 
 	# get first joke from jokes collection
@@ -122,22 +116,21 @@ def joke():
 	# async broke. just give them a damn joke.
 	if joke is None:
 		joke = rand_joke()
-		thread.start_new_thread ( async )
+		# for some reason, i have to pass an empty dic for *args
+		thread.start_new_thread ( async, () )
 
 	# asyncronously do the stuff that we don't need to accomplish to give the user a joke
 	# remove used joke
 	jokes.remove(joke)
-	thread.start_new_thread ( async )
+	thread.start_new_thread ( async, () )
 
 	return joke['joke'].strip('\\')
 
 ## start a new thread to remove returned joke from the jokes collection / make a new one
-def async(coll):
-	jokes = connect('jokes')
-	# mongo insert
+def async():	# mongo insert
 	for i in range(2):
 		new_joke = { 'joke': rand_joke()}
-		coll.insert(new_joke)
+		jokes.insert(new_joke)
 
 ## generate a random joke from list of types
 def rand_joke():\
@@ -153,4 +146,3 @@ def rand_joke():\
 		joke = chicken()
 
 	return joke
-
