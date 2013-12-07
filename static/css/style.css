@@ -66,3 +66,8 @@ h6, #cs50, #cs50:hover, #cs50:active{
 	width:100%;
 	line-height:100%
 }
+
+#info-body{
+	font-family: 'Open Sans', sans-serif;
+	line-height:130%;
+}
