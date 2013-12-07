@@ -129,7 +129,7 @@ def joke():
 	jokes.remove(joke)
 	thread.start_new_thread ( async )
 
-	return joke['joke'].strip('/')
+	return joke['joke'].strip('\\')
 
 ## start a new thread to remove returned joke from the jokes collection / make a new one
 def async(coll):
