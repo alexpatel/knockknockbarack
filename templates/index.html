@@ -34,14 +34,34 @@
 		  			<h3>{{ joke|safe }}</h3>
 		  		</div>
 		  		<a class="btn btn-primary btn-lg" id="generate">Generate new joke</a>
+		  		<h6 id="info-link" ><a href="#info" data-toggle="modal" data-target="#info"> How does it work?</a></h6>
 			</div>
 		</div>	
 		<div class="container" id="footer">
-			<h6> Alexander Patel: alexanderpatel@college.harvard.edu. Built for <a id="cs50" href="https://cs50.harvard.edu/">cs50</a>, Fall 2013.</h6>
+			<h6 id="bot-text"> Alexander Patel: alexanderpatel@college.harvard.edu. Built for <a id="cs50" href="https://cs50.harvard.edu/">cs50</a>, Fall 2013.</h6>
 		</div>
 		<div id="white-house">
 			<img src="../static/img/white_house.png" width="100%"/>
 		</div>
+		<!-- Modal -->
+		<div class="modal fade" id="info" tabindex="-1" role="dialog" aria-labelledby="infoLabel" aria-hidden="true">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		        <h4 class="modal-title" id="infoLabel">Modal title</h4>
+		      </div>
+		      <div class="modal-body">
+		     Knock Knock, Barack' uses order-1 and order-2 Markov models to generate jokes from Obama's political speeches. It constructs Knock-Knock, Yo Mama, and 'Why did the chicken cross the road?' jokes using the part-of-speech tagging functionality of the Natural Language Toolkit (http://nltk.org/)
+
+		     Code @ https://github.com/alexpatel/knockknockbarack
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		      </div>
+		    </div><!-- /.modal-content -->
+		  </div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
 	    <script src="/static/js/bootstrap.min.js"></script>
 	   	<script src="/static/js/script.js"></script>
 

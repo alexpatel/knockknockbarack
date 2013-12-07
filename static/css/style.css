@@ -52,7 +52,7 @@ h6, #cs50, #cs50:hover, #cs50:active{
 	font-family: 'Open Sans', sans-serif;
 }
 
-h6{
+#bot-text{
 	margin-left: auto;
 	margin-right: auto;
 	padding-left:10px;
