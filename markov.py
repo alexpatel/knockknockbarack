@@ -122,18 +122,18 @@ def joke():
 	# async broke. just give them a damn joke.
 	if joke is None:
 		joke = rand_joke()
-		thread.start_new_thread ( async, (jokes) )
+		thread.start_new_thread ( async, jokes )
 
 	# asyncronously do the stuff that we don't need to accomplish to give the user a joke
-	thread.start_new_thread ( async, (jokes, joke) )
+	# remove used joke
+	jokes.remove(joke)
+	thread.start_new_thread ( async, jokes )
 
 	return joke['joke'].strip('/')
 
 ## start a new thread to remove returned joke from the jokes collection / make a new one
-def async(coll, joke=None):
-	# remove used joke
-	if joke:
-		coll.remove(joke)
+def async(coll):
+
 
 	# mongo insert
 	new_joke = { 'joke': rand_joke()}
