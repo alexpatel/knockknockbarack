@@ -16,12 +16,10 @@ body{
 	margin-top:45px;
 	margin-bottom:10px;
 	font-family: 'Luckiest Guy', cursive;
-	background-color:#003D7C;
 	color:#FFEFBC;
 }
 
 .btn:active, .btn:hover{
-	background-color:#33597E;
 	color:#FFEFBC;
 }
 

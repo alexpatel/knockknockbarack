@@ -29,11 +29,11 @@ def generate(start_word=None):
 	# build word until natural sentence end is reached
 	while not word['end']:
 		try:
-			count = words.find({'1': word['2'],  '2': word['3']}).count()
-			#count = words.find({'1': word['2']}).count()
+			#count = words.find({'1': word['2'],  '2': word['3']}).count()
+			count = words.find({'1': word['2']}).count()
 			if count is not 0:
-				word = words.find({'1': word['2'], '2': word['3']})[randint(0, words.find({'1': word['2'],  '2': word['3']}).count() - 1)]
-				#word = words.find({'1': word['2']})[randint(0, words.find({'1': word['2']}).count() - 1)]
+				#word = words.find({'1': word['2'], '2': word['3']})[randint(0, words.find({'1': word['2'],  '2': word['3']}).count() - 1)]
+				word = words.find({'1': word['2']})[randint(0, words.find({'1': word['2']}).count() - 1)]
 			else: raise KeyError # pretty janky
 		except KeyError:
 			# word at end of file - no '2'/'3' string created
