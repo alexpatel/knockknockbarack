@@ -1,7 +1,9 @@
 Knock Knock, Barack
 ================
 
-'Knock Knock, Barack' generates original jokes using order-1 and order-2 Markov chains from a set of Obama campaign and political speeches.
+'Knock Knock, Barack' uses order-1 and order-2 Markov models to generate jokes from Obama's political speeches. It constructs Knock-Knock, Yo Mama, and 'Why did the chicken cross the road?' jokes using the part-of-speech tagging functionality of the Natural Language Toolkit (http://nltk.org/). 
+
+The application is hosted at: knockknockbarack.com. 
 
 ================
 
