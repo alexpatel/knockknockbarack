@@ -111,6 +111,9 @@ def chicken():
 def joke():
 	jokes = connect('jokes')
 
+	if joke.count() is 0:
+		return rand_joke()
+		
 	# get first joke from jokes collection
 	joke = jokes.find_one()
 
