@@ -73,7 +73,7 @@ def rebuild_jokes():
 	jokes.remove()
 
 	# insert 10 new jokes
-	for i in range(15):
+	for i in range(50):
 		new_joke = { 'joke': markov.rand_joke()}
 		jokes.insert(new_joke)
 

@@ -2,7 +2,7 @@ from conf import connect
 from random import randint	
 from nltk import word_tokenize, pos_tag
 import thread
-from build import rebuild_jokes
+import build
 
 markov_length = 125
 
@@ -113,7 +113,7 @@ def joke():
 	jokes = connect('jokes')
 
 	if jokes.count() is 0:
-		thread.start_new_thread(rebuild_jokes)
+		thread.start_new_thread(build.rebuild_jokes)
 		return rand_joke()
 
 	# get first joke from jokes collection
@@ -122,22 +122,22 @@ def joke():
 	# async broke. just give them a damn joke.
 	if joke is None:
 		joke = rand_joke()
-		thread.start_new_thread ( async, jokes )
+		thread.start_new_thread ( async )
 
 	# asyncronously do the stuff that we don't need to accomplish to give the user a joke
 	# remove used joke
 	jokes.remove(joke)
-	thread.start_new_thread ( async, jokes )
+	thread.start_new_thread ( async )
 
 	return joke['joke'].strip('/')
 
 ## start a new thread to remove returned joke from the jokes collection / make a new one
 def async(coll):
-
-
+	jokes = connect('jokes')
 	# mongo insert
-	new_joke = { 'joke': rand_joke()}
-	coll.insert(new_joke)
+	for i in range(2):
+		new_joke = { 'joke': rand_joke()}
+		coll.insert(new_joke)
 
 ## generate a random joke from list of types
 def rand_joke():\
