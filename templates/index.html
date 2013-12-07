@@ -30,9 +30,12 @@
 		</div>
 		<div class="container content">
 			<div class="jumbotron">
-				<div class="joke"
-		  			<h3>{{ joke|safe }}</h3>
+				<div class="joke">
+		  		<blockquote>
+				<h3>{{ joke|safe }}</h3>
 		  		</div>
+<cite title="Source Title">Barack Obama</cite></small>
+</blockquote>
 		  		<a class="btn btn-primary btn-lg" id="generate">Generate new joke</a>
 		  		<h6 id="info-link" ><a href="#info" data-toggle="modal" data-target="#info"> How does it work?</a></h6>
 			</div>
@@ -53,6 +56,7 @@
 		      </div>
 		      <div class="modal-body" id="info-body">
 		     Knock Knock, Barack' uses order-1 and order-2 Markov models to generate jokes from Obama's political speeches. It constructs Knock-Knock, Yo Mama, and 'Why did the chicken cross the road?' jokes with the help of the part-of-speech tagging functionality of the <a href="http://nltk.org/)">Natural Language Toolkit</a>.
+
 		     <br><br>
 		     Find the code on <a href="https://github.com/alexpatel/knockknockbarack"> github </a>
 		      </div>
