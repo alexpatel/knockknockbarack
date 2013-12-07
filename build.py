@@ -70,10 +70,17 @@ def insert(text, collection):
 ## for when I do something stupid and want to quickly rebuild the cached jokes
 def rebuild_jokes():
 	jokes = connect('jokes')
-	jokes.remove()
 
 	# insert 10 new jokes
 	for i in range(50):
 		new_joke = { 'joke': markov.rand_joke()}
 		jokes.insert(new_joke)
+		print new_joke['joke']
+
+def add_jokes(num):
+	jokes = connect('jokes')
+	for i in range(num):
+		new_joke = { 'joke': markov.rand_joke()}
+		jokes.insert(new_joke)
+		print new_joke['joke']
 
