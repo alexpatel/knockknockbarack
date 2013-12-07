@@ -74,3 +74,7 @@ h6, #cs50, #cs50:hover, #cs50:active{
 #jumbotron{
 	padding-bottom: 5px;
 }
+
+h3{
+	text-transform:none;
+}
