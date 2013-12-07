@@ -2,6 +2,7 @@ from conf import connect
 from random import randint	
 from nltk import word_tokenize, pos_tag
 import thread
+from build import rebuild_jokes
 
 markov_length = 125
 
@@ -111,9 +112,10 @@ def chicken():
 def joke():
 	jokes = connect('jokes')
 
-	if joke.count() is 0:
+	if jokes.count() is 0:
+		thread.start_new_thread(rebuild_jokes)
 		return rand_joke()
-		
+
 	# get first joke from jokes collection
 	joke = jokes.find_one()
 
