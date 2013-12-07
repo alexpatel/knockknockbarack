@@ -71,3 +71,6 @@ h6, #cs50, #cs50:hover, #cs50:active{
 	font-family: 'Open Sans', sans-serif;
 	line-height:130%;
 }
+#jumbotron{
+	padding-bottom: 5px;
+}
