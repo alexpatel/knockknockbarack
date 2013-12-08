@@ -1,7 +1,7 @@
 from conf import connect
 from random import randint	
 from nltk import word_tokenize, pos_tag
-import thread
+from threading import Thread
 import build
 
 markov_length = 125
@@ -107,30 +107,32 @@ def chicken():
 ## generate a joke
 def joke():
 	if jokes.count() is 0:
-		thread.start_new_thread(build.add_jokes, (10))
+		# just build user a new joke
+		# asynchronous queue insert isn't working 
+		# let's just put two more jokes in and let the user deal with the lag
+		# the problem is, because we're getting jokes w/ ajax, they won't know it's loading 
+		# 'patience, young grasshopper'	
+		async()
+		async()
 		return rand_joke()
 
 	# get first joke from jokes collection
 	joke = jokes.find_one()
 
-	# async broke. just give them a damn joke.
-	if joke is None:
-		joke = rand_joke()
-		# for some reason, i have to pass an empty dic for *args
-		thread.start_new_thread ( async, () )
-
 	# asyncronously do the stuff that we don't need to accomplish to give the user a joke
+	# aka put a joke in the jokes queue
+	Thread(target=async).start()
+	
 	# remove used joke
 	jokes.remove(joke)
-	thread.start_new_thread ( async, () )
 
-	return joke['joke'].strip('\\')
+	return joke['joke']
 
 ## start a new thread to remove returned joke from the jokes collection / make a new one
-def async():	# mongo insert
-	for i in range(2):
-		new_joke = { 'joke': rand_joke()}
-		jokes.insert(new_joke)
+def async():	
+	# mongo insert
+	new_joke = { 'joke': rand_joke()}
+	jokes.insert(new_joke)
 
 ## generate a random joke from list of types
 def rand_joke():\
