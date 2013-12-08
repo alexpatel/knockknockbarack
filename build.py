@@ -74,4 +74,3 @@ def add_jokes(num):
 	for i in range(num):
 		new_joke = { 'joke': markov.rand_joke()}
 		jokes.insert(new_joke)
-		print new_joke['joke']

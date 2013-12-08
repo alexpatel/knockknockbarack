@@ -1,0 +1,14 @@
+'Knock Knock, Barack': Design
+Alexander Patel
+
+Objective: to generate original jokes from Obama's political speeches. 
+
+The first part of my project was to analyze  a bunch of Obama's speeches so that I could generate text from them. I went out and got the transcripts to his speeches, and wrote a script (build.py -> .build()) that goes through all the speeches and inserts each word and some information about it's part-of-speech and following words as a Markov object. With 100,000+ words, I decided to go with MongoDB for a database; I never need to insert (after setting up) or modify words, so retrieval time was the entire pie. MongoDB > MySQl for this (or so I was told by the experts on the internet), so I went with the popular NoSQL option. 
+
+The next step was to generate text. See documentation -> markov.py -> generate(start_word=None) for how I went about doing this. I use bigram and unigram Markov chains on the words that I have taken from Obama's speeches. In essence, the word that occurs in a given phrase depends only the two words (or single word, in some cases) that come before it. 
+
+I then went to generate structured, semi-coherent jokes from these words. Again, see documentation -> markov.py -> yo_mama(), knockknock(), chicken() for how I tried to do this. 
+
+Next was setting up the application to serve these jokes via a website. I built my project on the Flask microframework, what I found to be a lightweight way to easily develop and deploy what was inevitably going to be a frontend-light application (I just need to send the user a joke...). Once hooked up, I was printing jokes to localhost in no time. However, I noticed that it takes a non-trivial joke to generate a new joke every time the page was refreshed. I tried to deal with asynchronously (see documentation -> markov.py -> joke()). Basically, I tried to implement a queue of jokes that would maintain itself after a joke is sent to the user, so that the lag in building a joke happens server-side on the DL. Also, I decided to serve jokes using AJAX - the only thing that changes on the page when you want a joke should be the joke itself. 
+
+The html/css employs Twitter Bootstrap to be responsive to different window sizes. The site is 'Murica themed (of course). Images used are under the Creative Commons license. 
