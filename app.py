@@ -1,11 +1,11 @@
 import flask
-from markov import *
+from markov import joke
 
 app = flask.Flask(__name__)
  
 @app.route('/')
 def main():
-	return flask.render_template('index.html', joke=rand_joke()) 
+	return flask.render_template('index.html', joke=joke()) 
 
 @app.route('/_get_joke')
 def get_joke():
