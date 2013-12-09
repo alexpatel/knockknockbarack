@@ -13,7 +13,7 @@ def get_joke():
 
 if __name__ == '__main__':
 	# for deployment
-	#app.run(host='0.0.0.0', port=80)
+	app.run(host='0.0.0.0', port=80)
 
 	# dev server
-	app.run()
+	#app.run()
