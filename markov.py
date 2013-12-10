@@ -17,11 +17,13 @@ def generate(start_word=None):
 		if start_word:
 			# pick a random beginning with start_word as first word
 			while word is '-':
-				word = words.find({'1': start_word})[randint(0, words.find({'1': start_word}).count() - 1)]
+				curs = words.find({'1': start_word})
+				word = curs[randint(0, curs.count() - 1)]
 		else:
 			# get random sentence beginning
 			while word is '-':
-				word = words.find({'start': True})[randint(0, words.find({'start': True}).count() - 1)]
+				curs = words.find({'start': True})
+				word = curs[randint(0, curs.count() - 1)]
 	except ValueError:
 		# try again
 		if start_word: generate(start_word)
@@ -32,16 +34,18 @@ def generate(start_word=None):
 	# build word until natural sentence end is reached
 	while not word['end']:
 		try:
-			count = words.find({'1': word['2'],  '2': word['3']}).count()
+			curs = words.find({'1': word['2'],  '2': word['3']})
+			count = curs.count()
 			#count = words.find({'1': word['2']}).count()
 			if count is not 0:
-				word = words.find({'1': word['2'], '2': word['3']})[randint(0, words.find({'1': word['2'],  '2': word['3']}).count() - 1)]
+				word = curs[randint(0, count - 1)]
 				#word = words.find({'1': word['2']})[randint(0, words.find({'1': word['2']}).count() - 1)]
 			else: raise KeyError # pretty janky
 		except KeyError:
 			# word at end of file - no '2'/'3' string created
 			try:
-				count =  words.find({'1': word['2']}).count()
+				curs = words.find({'1': word['2']})
+				count =  curs.count()
 				if count is not 0:
 					word = words.find({'1': word['2']})[randint(0, count - 1)]
 				else: raise KeyError
@@ -70,7 +74,8 @@ def yo_mama():
 	
 	# these are just one's that nltk doesn't pick up on. no idea why.
 	while adj in ['own', "don't", "wasn't", "didn't", "won't"]:
-		adj = words.find({'pos': 'JJ'})[randint(0, words.find({'pos': 'JJ'}).count() - 1)]['1'].strip('.')
+		poss = words.find({'pos': 'JJ'})
+		adj = poss[randint(0, poss.count() - 1)]['1'].strip('.')
 
 	# generate a phrase starting with a 'that' that proceeds an adjective
 	docs = words.find({'pos': 'JJ', '2':'that'})
@@ -98,7 +103,8 @@ def chicken():
 	start = words.find({'1': 'to'})[randint(0, words.find({'1': 'to'}).count() - 1)]['2'].strip('.')
 	# we want to find 'to' --> verb
 	while not pos_tag(word_tokenize(start))[0][1].startswith('V') or 'ing' in start:
-		start = words.find({'1': 'to'})[randint(0, words.find({'1': 'to'}).count() - 1)]['2'].strip('.')
+		curs = words.find({'1': 'to'})
+		start = curs[randint(0, curs.count() - 1)]['2'].strip('.')
 
 	phrase = generate(start)
 
