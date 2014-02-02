@@ -16,7 +16,7 @@ app.wsgi_app = ProxyFix(app.wsgi_app)
 
 if __name__ == '__main__':
 	# for deployment
-	app.run(host='0.0.0.0', port=80)
+	app.run()
 
 	# dev server
 	#app.run(debug=True)
